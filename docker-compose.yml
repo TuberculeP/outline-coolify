@@ -7,7 +7,7 @@ services:
     ports:
       - "3004:3000"
     volumes:
-      - storage-data:/var/lib/outline/data
+      - staging-outline-storage-data:/app/staging-outline-storage-data
     depends_on:
       - postgres
       - redis
@@ -32,7 +32,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - database-data:/var/lib/postgresql/data
+      - staging-outline-database-data:/app/staging-outline-database-data
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 30s
