@@ -5,7 +5,7 @@ services:
     image: docker.getoutline.com/outlinewiki/outline:latest
     env_file: ./docker.env
     ports:
-      - "3003:3000"
+      - "3004:3000"
     volumes:
       - storage-data:/var/lib/outline/data
     depends_on:
