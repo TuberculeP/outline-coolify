@@ -5,9 +5,9 @@ services:
     image: docker.getoutline.com/outlinewiki/outline:latest
     env_file: ./docker.env
     ports:
-      - "3004:3000"
+      - "3003:3000"
     volumes:
-      - staging-outline-storage-data:/app/staging-outline-storage-data
+      - ./storage-data:/var/lib/outline/data
     depends_on:
       - postgres
       - redis
@@ -32,7 +32,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - staging-outline-database-data:/app/staging-outline-database-data
+      - ./database-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 30s
