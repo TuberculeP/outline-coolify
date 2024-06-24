@@ -1,16 +1,19 @@
 version: "3.2"
 services:
-
   outline:
     image: docker.getoutline.com/outlinewiki/outline:latest
     env_file: ./docker.env
     ports:
       - "3003:3000"
     volumes:
-      - storage-data:/var/lib/outline/data
+      - ./outline-storage-data:/var/lib/outline/data
     depends_on:
       - postgres
       - redis
+    labels:
+      - coolify.managed=true
+      - coolify.type=application
+      - coolify.name=outline
 
   redis:
     image: redis
@@ -18,13 +21,17 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./redis.conf:/redis.conf
+      - ./outline-redis.conf:/redis.conf
     command: ["redis-server", "/redis.conf"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 30s
       retries: 3
+    labels:
+      - coolify.managed=true
+      - coolify.type=database
+      - coolify.name=redis
 
   postgres:
     image: postgres
@@ -32,7 +39,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - database-data:/var/lib/postgresql/data
+      - ./outline-database-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready"]
       interval: 30s
@@ -42,7 +49,13 @@ services:
       POSTGRES_USER: 'user'
       POSTGRES_PASSWORD: 'pass'
       POSTGRES_DB: 'outline'
+    labels:
+      - coolify.managed=true
+      - coolify.type=database
+      - coolify.name=postgres
 
 volumes:
   storage-data:
+    driver: local
   database-data:
+    driver: local
